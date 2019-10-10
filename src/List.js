@@ -8,8 +8,11 @@ class List extends React.Component {
             header: this.props.header
   }
   
-  handleDelete() {
-    console.log('Delete')
+  handleDelete = (id) => {
+    let newArray = this.state.cards.filter(item => item.id !== id);
+    this.setState({
+      cards: newArray
+    });
   }
 
   newRandomCard() {
@@ -23,7 +26,6 @@ class List extends React.Component {
   }
 
   handleNewCard = () => {
-    console.log('New Card')
     let newCard = this.newRandomCard()
     let newArray = [...this.state.cards, newCard]
     this.setState ({
@@ -58,6 +60,7 @@ class List extends React.Component {
           {this.state.cards.map((card) =>
             <Card
               key={card.id}
+              id = {card.id}
               title={card.title}
               content={card.content}
               deleteItem={this.handleDelete}
