@@ -90,20 +90,40 @@ class App extends Component {
     }
   }
 
-  handleNewCard = () => {
+  handleNewCard = (id) => {
     let newCard = this.newRandomCard()
-    let newArray = [...this.state.cards, newCard]
-    this.setState ({
-      cards: newArray
+    let newCards ={...this.state.store.allCards, [newCard.id]: newCard}
+    let newList = this.state.store.lists.map(list => {
+      let newCardIds
+      if(list.id === id) {
+        newCardIds =  [...list.cardIds, newCard.id]
+
+      }
+      else {
+        newCardIds = list.cardIds
+      }
+      return {id: list.id,
+              header: list.header,
+              cardIds: newCardIds}
     })
 
+    console.log(newList)
+    console.log(this.state.store.lists)
+    console.log(newCards)
+    console.log(this.state.store.allCards)
+    this.setState({
+    store: {
+      lists : newList,
+      allCards: newCards
+    }
+  })
   }
 
   
 
 
   render() {
-    const { store } = this.props
+    // const { store } = this.props
     return (
       <main className='App'>
         <header className='App-header'>
@@ -112,10 +132,12 @@ class App extends Component {
         <div className='App-list'>
           {this.state.store.lists.map(list => (
             <List
+              id={list.id}
               key={list.id}
               header={list.header}
               cards={list.cardIds.map(id => this.state.store.allCards[id])}
               deleteItem = {this.handleDelete}
+              addCard = {this.handleNewCard}
             />
           ))}
         </div>
